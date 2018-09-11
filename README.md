@@ -14,6 +14,6 @@ console.log(cnpj.isValid('75875106000138'))
 
 var cnpjNum = cnpj.generate()
 console.log(cnpj.isValid(cnpjNum)) // result true
-console.log(cnpj.format(('75875106000138'))) // 021.116.060-14
+console.log(cnpj.format(('75344111000114'))) // 75.344.111/0001-14
 
 ```
