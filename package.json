@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "cnpj tools",
   "main": "index.js",
+  "keywords": ["cnpj"],
   "scripts": {
     "test": "jest"
   },
