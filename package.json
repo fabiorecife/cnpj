@@ -1,9 +1,11 @@
 {
   "name": "@fabioalmeida/cnpj",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "cnpj tools",
   "main": "index.js",
-  "keywords": ["cnpj"],
+  "keywords": [
+    "cnpj"
+  ],
   "scripts": {
     "test": "jest"
   },
@@ -21,6 +23,6 @@
     "jest": "^23.5.0"
   },
   "dependencies": {
-    "@fabioalmeida/modulo11": "^1.0.0"
+    "@fabioalmeida/modulo11": "^1.0.1"
   }
 }

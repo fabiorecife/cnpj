@@ -1,38 +1,38 @@
-const Modulo11 = require('@fabioalmeida/modulo11')
-const modulo11 = new Modulo11(2,9)
+var Modulo11 = require('@fabioalmeida/modulo11')
+var modulo11 = new Modulo11(2,9)
 let CNPJ = {
-    allNumberSame (numero) {
+    allNumberSame: function (numero) {
         return /^(.)\1+$/.test(numero)
     },
-    removePunctuation (numero) {
+    removePunctuation: function (numero) {
         return numero.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
     },
-    isNumber (numero) {
+    isNumber: function (numero) {
       return /^\d+$/.test(numero)
     },
-    checkDigit(cpfWihoutCheckDigits) {
-        let digit1, digit2, calc13
+    checkDigit: function(cpfWihoutCheckDigits) {
+        var digit1, digit2, calc13
         digit1 = modulo11.checkDigit(cpfWihoutCheckDigits)
         calc13 = cpfWihoutCheckDigits + digit1
         digit2 = modulo11.checkDigit(calc13)
         return ((digit1*10)+digit2)
     },
-    verificationDigits (cpfWihoutCheckDigits) {
-      let digit = this.checkDigit(cpfWihoutCheckDigits)
+    verificationDigits: function (cpfWihoutCheckDigits) {
+      var digit = this.checkDigit(cpfWihoutCheckDigits)
       digit = digit.toString()
       if (digit.length < 2) {
           digit = '0' + digit
       }
       return digit
     },
-    randomInt(max) {
+    randomInt: function(max) {
         return Math.floor(Math.random() * Math.floor(max))
     },
-    generate(_prefix, _filial) {
-        let digits = []
+    generate: function(_prefix, _filial) {
+        var digits = []
         if (_prefix) {
             if ((typeof _prefix) === 'string') {
-                for(let i = 0; i <  _prefix.length; i++) {
+                for(var i = 0; i <  _prefix.length; i++) {
                     digits.push(parseInt(_prefix[i]))
                 }
             }
@@ -56,21 +56,21 @@ let CNPJ = {
         digits = digits.join('')
         return digits+this.verificationDigits(digits)
     },
-    generateFullRandom() {
-        let digits = []
+    generateFullRandom: function() {
+        var digits = []
         while (digits.length < 12) {
             digits.push(this.randomInt(9))
         }
         digits = digits.join('')
         return digits+this.verificationDigits(digits)
     },
-    format(_cnpj) {
-        let cnpj = this.removePunctuation(_cnpj)
+    format: function(_cnpj) {
+        var cnpj = this.removePunctuation(_cnpj)
         return cnpj.slice(0,2) + '.' + cnpj.slice(2,5) + '.' + cnpj.slice(5,8) + '/' + cnpj.slice(8,12) + '-' +
              cnpj.slice(12,14)
     },
-    isValid (cnpj) {
-        let first12, last2, cnpjString, digits
+    isValid: function (cnpj) {
+        var first12, last2, cnpjString, digits
         if ((typeof cnpj) !== 'string') {
             cnpjString = cnpj.join('')
         } else {
