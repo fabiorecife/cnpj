@@ -5,13 +5,23 @@ let CNPJ = {
         return /^(.)\1+$/.test(numero)
     },
     removePunctuation: function (numero) {
-        return numero.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
+        return numero.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toUpperCase()
     },
     isNumber: function (numero) {
       return /^\d+$/.test(numero)
     },
+    isCnpj: function (numero) {
+      return /^[A-Z\d]{12}\d{2}$/.test(numero)
+    },
+    isCnpjBase: function (numero) {
+      return /^[A-Z\d]{12}$/.test(numero)
+    },
     checkDigit: function(cpfWihoutCheckDigits) {
         var digit1, digit2, calc13
+        cpfWihoutCheckDigits = this.removePunctuation(cpfWihoutCheckDigits)
+        if (!this.isCnpjBase(cpfWihoutCheckDigits)) {
+            throw new Error('Invalid CNPJ base')
+        }
         digit1 = modulo11.checkDigit(cpfWihoutCheckDigits)
         calc13 = cpfWihoutCheckDigits + digit1
         digit2 = modulo11.checkDigit(calc13)
@@ -32,8 +42,9 @@ let CNPJ = {
         var digits = []
         if (_prefix) {
             if ((typeof _prefix) === 'string') {
+                _prefix = this.removePunctuation(_prefix)
                 for(var i = 0; i <  _prefix.length; i++) {
-                    digits.push(parseInt(_prefix[i]))
+                    digits.push(_prefix[i])
                 }
             }
         }
@@ -42,10 +53,11 @@ let CNPJ = {
         }
         if (_filial && _filial.length === 4) {
             if ((typeof _filial) === 'string') {
-                digits[8] = parseInt(_filial[0])
-                digits[9] = parseInt(_filial[1])
-                digits[10] = parseInt(_filial[2])
-                digits[11] = parseInt(_filial[3])
+                _filial = this.removePunctuation(_filial)
+                digits[8] = _filial[0]
+                digits[9] = _filial[1]
+                digits[10] = _filial[2]
+                digits[11] = _filial[3]
             }
         } else {
             digits[8] = 0
@@ -78,7 +90,7 @@ let CNPJ = {
         }
         cnpjString = this.removePunctuation(cnpjString)
         if (cnpjString.length !== 14) return false
-        if (!this.isNumber(cnpjString)) return false
+        if (!this.isCnpj(cnpjString)) return false
         if (this.allNumberSame(cnpjString)) return false
 
         first12 = cnpjString.slice(0,12)

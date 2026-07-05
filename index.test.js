@@ -1,62 +1,88 @@
+const assert = require('node:assert/strict')
+const test = require('node:test')
+
 const cnpj = require('./')
 
-
 test('cnpj is valid', () => {
-    expect(cnpj.isValid('75875106000138')).toBe(true)
-    expect(cnpj.isValid([7,5,8,7,5,1,0,6,0,0,0,1,3,8])).toBe(true)
-    expect(cnpj.isValid('04200746000108')).toBe(true)
-    expect(cnpj.isValid('21.426.012/0001-52')).toBe(true)
-    expect(cnpj.isValid('97.455.259/0001-69')).toBe(true)
-
+    assert.equal(cnpj.isValid('75875106000138'), true)
+    assert.equal(cnpj.isValid([7, 5, 8, 7, 5, 1, 0, 6, 0, 0, 0, 1, 3, 8]), true)
+    assert.equal(cnpj.isValid('04200746000108'), true)
+    assert.equal(cnpj.isValid('21.426.012/0001-52'), true)
+    assert.equal(cnpj.isValid('97.455.259/0001-69'), true)
+    assert.equal(cnpj.isValid('12ABC34501DE35'), true)
+    assert.equal(cnpj.isValid('12abc34501de35'), true)
+    assert.equal(cnpj.isValid('12.ABC.345/01DE-35'), true)
 })
 
 test('cnpj is invalid', () => {
-    expect(cnpj.isValid('33300746000108')).toBe(false)
-    expect(cnpj.isValid('00000000000000')).toBe(false)
-    expect(cnpj.isValid('11111111111111')).toBe(false)
-    expect(cnpj.isValid('97.455.259/0001-ab')).toBe(false)
+    assert.equal(cnpj.isValid('33300746000108'), false)
+    assert.equal(cnpj.isValid('00000000000000'), false)
+    assert.equal(cnpj.isValid('11111111111111'), false)
+    assert.equal(cnpj.isValid('97.455.259/0001-ab'), false)
+    assert.equal(cnpj.isValid('12ABC34501DE34'), false)
+    assert.equal(cnpj.isValid('12ABC34501D#35'), false)
+    assert.equal(cnpj.isValid('12ABC34501DEAB'), false)
 })
 
 test('checkDigit', () => {
-    expect(cnpj.checkDigit('042007460001')).toBe(8)
-    expect(cnpj.checkDigit('758751060001')).toBe(38)
-    expect(cnpj.checkDigit('812980480001')).toBe(20)
-    expect(cnpj.checkDigit('934363140001')).toBe(12)
-
+    assert.equal(cnpj.checkDigit('042007460001'), 8)
+    assert.equal(cnpj.checkDigit('758751060001'), 38)
+    assert.equal(cnpj.checkDigit('812980480001'), 20)
+    assert.equal(cnpj.checkDigit('934363140001'), 12)
+    assert.equal(cnpj.checkDigit('12ABC34501DE'), 35)
 })
 
 test('verificationDigits', () => {
-    expect(cnpj.verificationDigits('042007460001')).toBe('08')
-    expect(cnpj.verificationDigits('812980480001')).toBe('20')
+    assert.equal(cnpj.verificationDigits('042007460001'), '08')
+    assert.equal(cnpj.verificationDigits('812980480001'), '20')
+    assert.equal(cnpj.verificationDigits('12ABC34501DE'), '35')
 })
 
 test('cnpj generator', () => {
-    let cnpjNumber = cnpj.generate()
-    expect(cnpj.isValid(cnpjNumber)).toBe(true)
-    expect(cnpjNumber.slice(8,12)).toMatch('0001')
+    const cnpjNumber = cnpj.generate()
+
+    assert.equal(cnpj.isValid(cnpjNumber), true)
+    assert.equal(cnpjNumber.slice(8, 12), '0001')
 })
 
 test('cnpj generator with filial', () => {
-    let cnpjNumber = cnpj.generate(false, '0003')
-    expect(cnpj.isValid(cnpjNumber)).toBe(true)
-    expect(cnpjNumber.slice(8,12)).toMatch('0003')
+    const cnpjNumber = cnpj.generate(false, '0003')
+
+    assert.equal(cnpj.isValid(cnpjNumber), true)
+    assert.equal(cnpjNumber.slice(8, 12), '0003')
 })
 
 test('cnpj generator with prefix', () => {
-    let cnpjNumber = cnpj.generate('123456')
-    expect(cnpj.isValid(cnpjNumber)).toBe(true)
-    expect(cnpjNumber.slice(0,6)).toMatch('123456')
+    const cnpjNumber = cnpj.generate('123456')
+
+    assert.equal(cnpj.isValid(cnpjNumber), true)
+    assert.equal(cnpjNumber.slice(0, 6), '123456')
+})
+
+test('cnpj generator with alphanumeric prefix', () => {
+    const cnpjNumber = cnpj.generate('12ABC3')
+
+    assert.equal(cnpj.isValid(cnpjNumber), true)
+    assert.equal(cnpjNumber.slice(0, 6), '12ABC3')
+})
+
+test('cnpj generator with alphanumeric filial', () => {
+    const cnpjNumber = cnpj.generate(false, '01DE')
+
+    assert.equal(cnpj.isValid(cnpjNumber), true)
+    assert.equal(cnpjNumber.slice(8, 12), '01DE')
 })
 
 test('cnpj generatorFullRandom', () => {
-    let cnpjNumber = cnpj.generateFullRandom()
-    expect(cnpj.isValid(cnpjNumber)).toBe(true)
+    const cnpjNumber = cnpj.generateFullRandom()
+
+    assert.equal(cnpj.isValid(cnpjNumber), true)
 })
 
-
 test('format cnpj', () => {
-    let cnpjNumber = cnpj.generate()
-    formatedCnpj = cnpj.format(cnpjNumber)
-    console.log(formatedCnpj)
-    expect(formatedCnpj).toMatch(/^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$/)
+    const cnpjNumber = cnpj.generate()
+    const formatedCnpj = cnpj.format(cnpjNumber)
+
+    assert.match(formatedCnpj, /^[A-Z\d]{2}\.[A-Z\d]{3}\.[A-Z\d]{3}\/[A-Z\d]{4}-\d{2}$/)
+    assert.equal(cnpj.format('12ABC34501DE35'), '12.ABC.345/01DE-35')
 })
