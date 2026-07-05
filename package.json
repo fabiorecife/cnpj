@@ -1,13 +1,13 @@
 {
   "name": "@fabioalmeida/cnpj",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "cnpj tools",
   "main": "index.js",
   "keywords": [
     "cnpj"
   ],
   "scripts": {
-    "test": "jest"
+    "test": "node --test"
   },
   "author": {
     "name": "Fabio Almeida",
@@ -19,10 +19,7 @@
     "url": "https://github.com/fabiorecife/cnpj.git"
   },
   "license": "ISC",
-  "devDependencies": {
-    "jest": "^26.4.2"
-  },
   "dependencies": {
-    "@fabioalmeida/modulo11": "^1.0.2"
+    "@fabioalmeida/modulo11": "2.0.0"
   }
 }
